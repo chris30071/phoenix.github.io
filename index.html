@@ -1,357 +1,814 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <title>Abhilash Christopher | Cybersecurity Expert</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
-    :root{
-      --bg:#020617;
-      --panel:#0f1724;
-      --muted:#94a3b8;
-      --accent:#22c55e;
-      --accent-soft:#4ade80;
-      --text:#e5e7eb;
-      --glass: rgba(255,255,255,0.03);
-      --glass-2: rgba(148,163,184,0.06);
-      --danger:#fb7185;
+    :root {
+      --bg: #020617;
+      --bg-alt: #020617;
+      --accent: #22c55e;
+      --accent-soft: #4ade80;
+      --accent-strong: #22c55e;
+      --muted: #94a3b8;
+      --danger: #fb7185;
+      --text: #e5e7eb;
+      --border: #1f2937;
+      --border-soft: rgba(148,163,184,0.24);
     }
 
-    /* Reset */
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%}
-    body{
-      font-family:"Fira Code",monospace;
-      background:linear-gradient(180deg,#020617 0%, #061021 60%);
-      color:var(--text);
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-      padding:20px;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      overflow-y:auto;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    /* Background layers (subtle, non-noisy) */
-    .bg{
-      position:fixed; inset:0; z-index:-4;
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #020617 0, #020617 35%, #020617 100%);
+      color: var(--text);
+      font-family: "Fira Code", monospace;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+
+    /* Layered animated background - made subtler and less noisy */
+    .bg {
+      position: fixed;
+      inset: 0;
       background:
-        radial-gradient(800px 400px at 92% 8%, rgba(34,197,94,0.06), transparent 20%),
-        radial-gradient(600px 300px at 6% 92%, rgba(56,189,248,0.04), transparent 18%),
-        linear-gradient(180deg, rgba(2,6,23,1), rgba(3,10,30,1));
-      pointer-events:none;
-      animation: bg-shift 26s linear infinite;
-    }
-    @keyframes bg-shift{ from{transform:translateY(0)} to{transform:translateY(-18px)} }
-
-    /* soft orb */
-    .orb{
-      position:fixed; right:-80px; top:-60px; width:420px; height:420px;
-      border-radius:50%;
-      background:radial-gradient(circle at 30% 30%, rgba(34,197,94,0.28), rgba(34,197,94,0.06) 40%, transparent 60%);
-      filter: blur(14px); opacity:0.55; mix-blend-mode:screen; z-index:-3;
-      animation: orb-float 18s ease-in-out infinite alternate;
-    }
-    @keyframes orb-float{ from{transform:translateY(0) scale(1)} to{transform:translateY(20px) scale(1.04)} }
-
-    /* scanlines to give subtle terminal vibe (very faint) */
-    .scanlines{
-      position:fixed; inset:0; z-index:-2; pointer-events:none;
-      background-image: linear-gradient(to bottom, rgba(255,255,255,0.01) 1px, transparent 1px);
-      background-size:100% 24px; opacity:0.12;
+        radial-gradient(circle at 10% 0%, rgba(248,113,113,0.08), transparent 55%),
+        radial-gradient(circle at 90% 100%, rgba(56,189,248,0.08), transparent 55%),
+        linear-gradient(180deg, rgba(2,6,23,1), rgba(4,12,30,1));
+      opacity: 0.95;
+      z-index: -3;
+      animation: bgMove 28s linear infinite alternate;
+      pointer-events: none;
     }
 
-    /* layout */
-    .shell-layout{
-      width:100%; max-width:1120px;
-      display:grid;
-      grid-template-columns: minmax(0,0.95fr) minmax(0,1.25fr);
-      gap:20px;
+    /* Orb softened for clarity */
+    .orb {
+      position: fixed;
+      width: 420px;
+      height: 420px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, rgba(34,197,94,0.28), transparent 60%);
+      filter: blur(12px);
+      opacity: 0.5;
+      top: -90px;
+      right: -60px;
+      mix-blend-mode: screen;
+      z-index: -2;
+      animation: float 20s ease-in-out infinite alternate;
+      pointer-events: none;
     }
 
-    /* card / terminal panels */
-    .identity-card, .terminal-shell{
-      border-radius:14px;
-      padding:14px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border:1px solid var(--glass-2);
-      box-shadow: 0 20px 42px rgba(2,6,23,0.7);
-      position:relative;
-      overflow:hidden;
+    /* Very subtle texture overlay (reduced intensity) */
+    .noise {
+      position: fixed;
+      inset: -40px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+      mix-blend-mode: soft-light;
+      pointer-events: none;
+      z-index: -1;
     }
 
-    /* identity */
-    .identity-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-    .badge-chip{font-size:12px;padding:5px 10px;border-radius:999px;border:1px solid rgba(148,163,184,0.25);color:var(--muted);display:inline-flex;gap:8px;align-items:center}
-    .badge-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px rgba(34,197,94,0.6)}
-
-    .ascii-wrap{padding:10px;border-radius:10px;background:linear-gradient(135deg, rgba(15,23,42,0.6), rgba(15,23,42,0.4));border:1px solid rgba(30,64,175,0.14);margin-bottom:12px;overflow:auto}
-    pre.logo{font-size:12px;line-height:0.9;color:rgba(148,163,184,0.95);white-space:pre;overflow:auto;margin:0}
-
-    .name{font-size:14px;color:var(--accent-soft);letter-spacing:0.12em;font-weight:600;margin-bottom:4px}
-    .role{font-size:12px;color:var(--muted);text-transform:uppercase}
-
-    .meta{display:flex;flex-wrap:wrap;gap:8px 12px;color:var(--muted);font-size:13px;margin:10px 0}
-    .meta a{color:var(--accent-soft);text-decoration:none;border-bottom:1px dashed rgba(74,222,128,0.25)}
-    .meta a:focus{outline:2px solid rgba(74,222,128,0.14);outline-offset:3px}
-
-    .summary-block{padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(0,0,0,0.2), rgba(255,255,255,0.02));border:1px solid rgba(45,212,191,0.12);color:rgba(226,232,240,0.95);line-height:1.5;font-size:13px;margin-bottom:12px}
-
-    .stats-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
-    .stat-pill{padding:6px 10px;border-radius:999px;border:1px solid rgba(148,163,184,0.12);color:var(--muted);font-size:13px;display:inline-flex;align-items:center;gap:8px}
-
-    .nav-chips{display:flex;flex-wrap:wrap;gap:8px}
-    .nav-chip{font-size:13px;padding:7px 10px;border-radius:999px;border:1px solid rgba(148,163,184,0.12);background:transparent;color:var(--muted);cursor:pointer;transition:all 140ms ease}
-    .nav-chip:hover,.nav-chip:focus{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,0.6);border-color:rgba(74,222,128,0.18);color:var(--text)}
-    .nav-chip:focus{outline:2px solid rgba(74,222,128,0.12);outline-offset:4px}
-    .hint-line{font-size:12px;color:var(--muted);margin-top:8px}
-
-    /* terminal */
-    .terminal-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(30,64,175,0.12)}
-    .dot{width:12px;height:12px;border-radius:50%;background:#ef4444;box-shadow:16px 0 0 #facc15,32px 0 0 #22c55e}
-    .term-title{font-size:13px;color:rgba(148,163,184,0.95)}
-    .term-title span{color:var(--accent-soft)}
-
-    .term-body{max-height:540px;overflow:auto;padding-right:8px}
-    .path{font-size:13px;color:var(--accent-soft);margin-top:6px;margin-bottom:6px}
-    .command{font-size:13px;color:var(--text);min-height:18px;display:inline-block;position:relative;margin-bottom:8px}
-    .command::before{content:"# ";color:var(--accent-soft)}
-    .cursor{display:inline-block;width:8px;height:1em;background:var(--accent-soft);margin-left:4px;vertical-align:-3px;animation:blink 1s steps(2,start) infinite}
-    @keyframes blink{0%,50%{opacity:1}50.01%,100%{opacity:0}}
-
-    .output{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:12px;white-space:pre-wrap}
-    .section-title{font-size:12px;color:var(--accent-soft);text-transform:uppercase;margin-bottom:6px}
-    .bullet{list-style:none;margin-left:1.1rem;position:relative;font-size:13px;color:var(--muted);margin-bottom:6px}
-    .bullet::before{content:"*";position:absolute;left:-1.1rem;color:var(--accent-soft)}
-
-    .meta-line{font-size:12px;color:rgba(148,163,184,0.95);display:flex;gap:10px;flex-wrap:wrap;margin:6px 0}
-    .tag{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid rgba(148,163,184,0.12);font-size:12px;color:var(--muted)}
-    .tag-dot{width:8px;height:8px;border-radius:50%;background:rgba(34,197,94,0.9)}
-
-    .system-status{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;margin-top:8px;opacity:0.95}
-    .status-ok{color:var(--accent-soft)}
-    .footer{font-size:12px;color:rgba(148,163,184,0.85);text-align:right;margin-top:10px}
-
-    /* responsive */
-    @media (max-width:960px){
-      .shell-layout{grid-template-columns:1fr; gap:14px}
-      .term-body{max-height:none}
+    @keyframes bgMove {
+      from { transform: translate3d(0, 0, 0); }
+      to   { transform: translate3d(-18px, -10px, 0); }
     }
 
-    /* reduced motion */
-    @media (prefers-reduced-motion:reduce){
-      .bg,.orb{animation:none}
-      .cursor{animation:none}
+    @keyframes float {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to   { transform: translate3d(-18px, 12px, 0) scale(1.05); }
+    }
+
+    .shell-layout {
+      max-width: 1120px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr);
+      gap: 1.5rem;
+      position: relative;
+    }
+
+    /* Sidebar / identity card */
+    .identity-card {
+      border-radius: 1.4rem;
+      padding: 1rem 1rem 1.1rem;
+      border: 1px solid rgba(148,163,184,0.35);
+      background:
+        linear-gradient(135deg, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
+      box-shadow:
+        0 18px 40px rgba(0,0,0,0.78);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .identity-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: 1px solid rgba(148,163,184,0.12);
+      pointer-events: none;
+    }
+
+    .identity-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+    }
+
+    .badge-chip {
+      font-size: 0.65rem;
+      padding: 0.18rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.45);
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34,197,94,0.8);
+    }
+
+    .ascii-wrap {
+      border-radius: 1rem;
+      padding: 0.6rem 0.7rem;
+      background: radial-gradient(circle at top left, rgba(51,65,85,0.76), transparent 60%);
+      border: 1px solid rgba(30,64,175,0.6);
+      margin-bottom: 0.75rem;
+      position: relative;
+      overflow: auto;
+    }
+
+    .ascii-wrap::after {
+      content: "AC";
+      position: absolute;
+      right: 0.7rem;
+      bottom: 0.4rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.16em;
+      color: rgba(148,163,184,0.35);
+    }
+
+    pre.logo {
+      font-size: 0.55rem;
+      line-height: 0.8rem;
+      color: rgba(148,163,184,0.85);
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .identity-main {
+      margin-bottom: 0.8rem;
+    }
+
+    .name {
+      font-weight: 600;
+      letter-spacing: 0.17em;
+      font-size: 0.88rem;
+      color: var(--accent-soft);
+      margin-bottom: 0.15rem;
+    }
+
+    .role {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .meta {
+      font-size: 0.74rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem 0.65rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .meta a {
+      color: var(--accent-soft);
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(74,222,128,0.4);
+    }
+
+    .meta a:hover, .meta a:focus {
+      border-bottom-style: solid;
+      outline: none;
+    }
+
+    .summary-block {
+      font-size: 0.78rem;
+      color: rgba(226,232,240,0.95);
+      line-height: 1.55;
+      border-radius: 0.9rem;
+      padding: 0.7rem 0.75rem;
+      background: radial-gradient(circle at top left, rgba(15,118,110,0.32), transparent 58%),
+                  rgba(15,23,42,0.95);
+      border: 1px solid rgba(45,212,191,0.25);
+      box-shadow: 0 18px 36px rgba(8,47,73,0.65);
+      margin-bottom: 0.7rem;
+    }
+
+    .summary-label {
+      font-size: 0.68rem;
+      color: rgba(148,163,184,0.9);
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .stats-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.7rem;
+      font-size: 0.7rem;
+    }
+
+    .stat-pill {
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.5);
+      color: rgba(148,163,184,0.95);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .stat-pill span {
+      font-size: 0.72rem;
+    }
+
+    .nav-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 0.15rem;
+    }
+
+    /* Added focus style for accessibility */
+    .nav-chip {
+      font-size: 0.7rem;
+      padding: 0.32rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.5);
+      color: rgba(148,163,184,0.95);
+      background: rgba(15,23,42,0.9);
+      cursor: pointer;
+      transition: border-color 140ms ease, box-shadow 140ms ease, transform 120ms ease, background 140ms ease;
+    }
+
+    .nav-chip span {
+      color: var(--accent-soft);
+    }
+
+    .nav-chip:hover,
+    .nav-chip:focus {
+      border-color: rgba(74,222,128,0.8);
+      box-shadow: 0 0 0 1px rgba(74,222,128,0.12), 0 12px 28px rgba(15,23,42,0.9);
+      transform: translateY(-1px);
+      background: radial-gradient(circle at top left, rgba(22,163,74,0.18), rgba(15,23,42,0.98));
+      outline: none;
+    }
+
+    .hint-line {
+      font-size: 0.68rem;
+      color: rgba(148,163,184,0.85);
+      margin-top: 0.25rem;
+    }
+
+    /* MAIN TERMINAL PANEL */
+    .terminal-shell {
+      border-radius: 1.5rem;
+      border: 1px solid var(--border);
+      background:
+        radial-gradient(circle at top left, rgba(34,197,94,0.12), transparent 65%),
+        radial-gradient(circle at bottom right, rgba(248,113,113,0.08), transparent 65%),
+        rgba(15,23,42,0.98);
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,0.95),
+        0 26px 70px rgba(0,0,0,0.9);
+      padding: 0.85rem 1.1rem 1.15rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .terminal-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: 1px solid rgba(148,163,184,0.12);
+      pointer-events: none;
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.45rem;
+      border-bottom: 1px solid rgba(30,64,175,0.55);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #ef4444;
+      box-shadow:
+        16px 0 0 #facc15,
+        32px 0 0 #22c55e;
+    }
+
+    .term-title {
+      font-size: 0.78rem;
+      color: rgba(148,163,184,0.95);
+    }
+
+    .term-title span {
+      color: rgba(74,222,128,0.9);
+    }
+
+    .term-body {
+      max-height: 540px;
+      overflow-y: auto;
+      padding-right: 0.35rem;
+    }
+
+    .path {
+      font-size: 0.78rem;
+      color: var(--accent-soft);
+      margin-top: 0.3rem;
+      margin-bottom: 0.08rem;
+    }
+
+    .command {
+      font-size: 0.8rem;
+      margin-bottom: 0.45rem;
+      color: var(--text);
+      display: inline-block;
+      position: relative;
+      min-height: 0.9rem;
+    }
+
+    .command::before {
+      content: "# ";
+      color: var(--accent-soft);
+    }
+
+    /* cursor handling improved - will be appended to last command */
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 1em;
+      background: var(--accent-soft);
+      margin-left: 2px;
+      animation: blink 1s steps(2, start) infinite;
+      vertical-align: -2px;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      50.01%, 100% { opacity: 0; }
+    }
+
+    .output {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.45;
+      margin-bottom: 0.9rem;
+      max-width: 100%;
+      white-space: pre-wrap;
+    }
+
+    .section-divider {
+      border-top: 1px dashed rgba(51,65,85,0.95);
+      margin: 0.85rem 0 0.9rem;
+    }
+
+    .section-title {
+      font-size: 0.78rem;
+      color: var(--accent-soft);
+      margin-bottom: 0.12rem;
+      text-transform: uppercase;
+    }
+
+    .bullet {
+      margin-left: 1.1rem;
+      list-style: none;
+      position: relative;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.2rem;
+    }
+
+    .bullet::before {
+      content: "*";
+      position: absolute;
+      left: -1.1rem;
+      color: var(--accent-soft);
+    }
+
+    .meta-line {
+      font-size: 0.73rem;
+      color: rgba(148,163,184,0.95);
+      display: flex;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+      margin: 0.18rem 0 0.4rem;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.08rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.5);
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-right: 0.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .tag-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(34,197,94,0.9);
+    }
+
+    .pill-danger {
+      color: var(--danger);
+      border-color: rgba(248,113,113,0.75);
+    }
+
+    .system-status {
+      font-size: 0.72rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      opacity: 0.85;
+    }
+
+    .status-ok {
+      color: var(--accent-soft);
+    }
+
+    .footer {
+      font-size: 0.7rem;
+      color: rgba(148,163,184,0.9);
+      text-align: right;
+      margin-top: 0.3rem;
+    }
+
+    @media (max-width: 960px) {
+      body {
+        padding: 1rem;
+      }
+
+      .shell-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .term-body {
+        max-height: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 0.7rem;
+      }
+
+      .identity-card,
+      .terminal-shell {
+        border-radius: 1rem;
+        padding: 0.7rem 0.75rem 0.9rem;
+      }
+
+      pre.logo {
+        font-size: 0.5rem;
+      }
+    }
+
+    /* Respect reduced motion preference: stop background and cursor animations */
+    @media (prefers-reduced-motion: reduce) {
+      .bg, .orb {
+        animation: none !important;
+      }
+      .cursor {
+        animation: none !important;
+        opacity: 1;
+      }
+    }
+
+    /* small keyboard focus affordance for interactive elements */
+    button.nav-chip:focus {
+      outline: 2px solid rgba(74,222,128,0.14);
+      outline-offset: 3px;
     }
   </style>
 </head>
 <body>
-  <div class="bg"></div>
-  <div class="orb" aria-hidden="true"></div>
-  <div class="scanlines" aria-hidden="true"></div>
+<div class="bg" aria-hidden="true"></div>
+<div class="orb" aria-hidden="true"></div>
+<div class="noise" aria-hidden="true"></div>
 
-  <div class="shell-layout" role="main">
-    <!-- IDENTITY -->
-    <aside class="identity-card" aria-label="Identity card">
-      <div class="identity-header">
-        <div class="badge-chip"><span class="badge-dot" aria-hidden="true"></span><span>STATUS: ACTIVE</span></div>
-        <div class="badge-chip">3+ YEARS EXP</div>
+<div class="shell-layout">
+  <!-- LEFT: Identity / Navigation -->
+  <aside class="identity-card" aria-label="Identity card">
+    <div class="identity-header">
+      <div class="badge-chip" role="status" aria-live="polite">
+        <span class="badge-dot" aria-hidden="true"></span>
+        <span>STATUS: ACTIVE</span>
       </div>
+      <div class="badge-chip">
+        <span>3+ YEARS EXP</span>
+      </div>
+    </div>
 
-      <div class="ascii-wrap" aria-hidden="true">
-        <pre class="logo">   ___    _     _ _ _           _     
+    <div class="ascii-wrap" aria-hidden="true">
+      <pre class="logo">
+   ___    _     _ _ _           _     
   / _ \  | |   (_) | |         | |    
  / /_\ \ | |__  _| | |__   ___ | |__  
  |  _  | | '_ \| | | '_ \ / _ \| '_ \ 
  | | | | | |_) | | | | | | (_) | | | |
- \_| |_/ |_.__/|_|_|_| |_|\___/|_| |_|</pre>
-      </div>
+ \_| |_/ |_.__/|_|_|_| |_|\___/|_| |_| 
+      </pre>
+    </div>
 
-      <div class="identity-main">
-        <div class="name">ABHILASH CHRISTOPHER</div>
-        <div class="role">CYBERSECURITY EXPERT · OFFENSIVE SECURITY ENGINEER</div>
-      </div>
+    <div class="identity-main">
+      <div class="name">ABHILASH CHRISTOPHER</div>
+      <div class="role">CYBERSECURITY EXPERT · OFFENSIVE SECURITY ENGINEER</div>
+    </div>
 
-      <div class="meta">
-        <span>📍 India</span>
-        <span>✉ <a href="mailto:your.email@example.com">your.email@example.com</a></span>
-        <span>GH <a href="https://github.com/lucifer01417" target="_blank" rel="noopener">github.com/lucifer01417</a></span>
-        <span>LI <a href="https://www.linkedin.com/in/your-linkedin-handle" target="_blank" rel="noopener">linkedin.com/in/your-linkedin-handle</a></span>
-      </div>
+    <div class="meta">
+      <span>📍 India</span>
+      <span>✉ <a href="mailto:your.email@example.com">your.email@example.com</a></span>
+      <span>GH <a href="https://github.com/lucifer01417" target="_blank" rel="noopener noreferrer">github.com/lucifer01417</a></span>
+      <span>LI <a href="https://www.linkedin.com/in/your-linkedin-handle" target="_blank" rel="noopener noreferrer">linkedin.com/in/your-linkedin-handle</a></span>
+    </div>
 
-      <div class="summary-block">
-        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px">Mission Brief</div>
-        Offensive security engineer and cybersecurity expert with 3+ years of experience simulating real-world attacker behaviour against web applications and Active Directory environments. I specialise in turning "something feels off" signals into clear attack paths, PoCs, and fixes that teams can ship.
-      </div>
+    <div class="summary-block">
+      <div class="summary-label">MISSION BRIEF</div>
+      Offensive security engineer and cybersecurity expert with 3+ years of experience simulating real-world
+      attacker behaviour against web applications and Active Directory environments. I specialise in taking
+      vague "something feels off" signals and turning them into clear attack paths, PoCs, and fixes that
+      teams can actually ship.
+    </div>
 
-      <div class="stats-row">
-        <div class="stat-pill">⚔ Web / API · AD · Internal</div>
-        <div class="stat-pill">☣ OSCP track · Red team mindset</div>
-        <div class="stat-pill">⌨ Python · PowerShell · Bash</div>
+    <div class="stats-row">
+      <div class="stat-pill">
+        <span>⚔</span>
+        <span>Web / API · AD · Internal</span>
       </div>
-
-      <div class="nav-chips" role="navigation" aria-label="Portfolio navigation">
-        <button class="nav-chip" data-target="#sec-summary" aria-controls="sec-summary">› Summary</button>
-        <button class="nav-chip" data-target="#sec-experience" aria-controls="sec-experience">› Experience</button>
-        <button class="nav-chip" data-target="#sec-arsenal" aria-controls="sec-arsenal">› Arsenal</button>
-        <button class="nav-chip" data-target="#sec-creds" aria-controls="sec-creds">› Credentials</button>
+      <div class="stat-pill">
+        <span>☣</span>
+        <span>OSCP track · Red team mindset</span>
       </div>
-      <div class="hint-line">hint: click a chip to jump inside the terminal.</div>
-    </aside>
-
-    <!-- TERMINAL -->
-    <main class="terminal-shell" aria-label="Terminal content">
-      <div class="terminal-header">
-        <div class="dot" aria-hidden="true"></div>
-        <div class="term-title">abhi@void<span> ~/portfolio/abhilash.log</span> — nvim</div>
+      <div class="stat-pill">
+        <span>⌨</span>
+        <span>Python · PowerShell · Bash</span>
       </div>
+    </div>
 
-      <div class="term-body" id="term-body">
-        <!-- Summary -->
-        <section id="sec-summary">
-          <div class="path">root@abhilash:~/mission_objective</div>
-          <div class="command" data-text="cat summary.txt"></div>
-          <div class="output">
-Offensive security engineer and cybersecurity expert with 3+ years of experience simulating real-world attacker behaviour against web applications and Active Directory environments. I focus on mapping attacker thinking: moving from low-noise footholds to impactful compromise while keeping signal high and noise low for blue teams.
+    <div class="nav-chips" role="navigation" aria-label="Portfolio navigation">
+      <button class="nav-chip" data-target="#sec-summary" aria-controls="sec-summary"><span>›</span> Summary</button>
+      <button class="nav-chip" data-target="#sec-experience" aria-controls="sec-experience"><span>›</span> Experience</button>
+      <button class="nav-chip" data-target="#sec-arsenal" aria-controls="sec-arsenal"><span>›</span> Arsenal</button>
+      <button class="nav-chip" data-target="#sec-creds" aria-controls="sec-creds"><span>›</span> Credentials</button>
+    </div>
+    <div class="hint-line">hint: click a chip to jump inside the terminal.</div>
+  </aside>
+
+  <!-- RIGHT: Terminal log -->
+  <main class="terminal-shell" role="main" aria-label="Terminal content">
+    <div class="terminal-header">
+      <div class="dot" aria-hidden="true"></div>
+      <div class="term-title">abhi@void<span> ~/portfolio/abhilash.log</span> — nvim</div>
+    </div>
+
+    <div class="term-body" id="term-body">
+      <!-- Summary -->
+      <section id="sec-summary" tabindex="-1">
+        <div class="path">root@abhilash:~/mission_objective</div>
+        <div class="command" data-text="cat summary.txt" aria-hidden="false"></div>
+        <div class="output">
+          Offensive security engineer and cybersecurity expert with 3+ years of experience simulating real-world
+          attacker behaviour against web applications and Active Directory environments. I focus on mapping
+          how attackers actually think: moving from low-noise footholds to impactful compromise while keeping
+          signal high and noise low for blue teams.
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Experience -->
+      <section id="sec-experience" tabindex="-1">
+        <div class="path">root@abhilash:~/logs/experience</div>
+        <div class="command" data-text="./show_history.sh"></div>
+
+        <div class="output">
+          <div class="section-title">[CURRENT] CYBERSECURITY EXPERT / OFFENSIVE SECURITY ENGINEER @ YOUR_COMPANY</div>
+          <div class="meta-line">
+            <span>Remote / India</span>
+            <span>2022 — Present (3 years)</span>
           </div>
-        </section>
+          <ul>
+            <li class="bullet">Deliver end-to-end penetration tests across web apps, APIs, and internal AD environments with clear attacker narratives.</li>
+            <li class="bullet">Recreate attacker chains from internet-exposed entry points to domain-level or data-centric impact using realistic TTPs.</li>
+            <li class="bullet">Produce concise, high-signal reports with PoCs and remediation guidance that development and infrastructure teams adopt.</li>
+          </ul>
+        </div>
+      </section>
 
-        <div style="height:10px"></div>
-        <div style="border-top:1px dashed rgba(51,65,85,0.9);margin:12px 0"></div>
+      <div class="section-divider"></div>
 
-        <!-- Experience -->
-        <section id="sec-experience">
-          <div class="path">root@abhilash:~/logs/experience</div>
-          <div class="command" data-text="./show_history.sh"></div>
-          <div class="output">
-            <div class="section-title">[CURRENT] CYBERSECURITY EXPERT / OFFENSIVE SECURITY ENGINEER @ YOUR_COMPANY</div>
-            <div class="meta-line"><span>Remote / India</span><span>2022 — Present (3 years)</span></div>
-            <ul>
-              <li class="bullet">Deliver end-to-end penetration tests across web apps, APIs, and internal AD environments with clear attacker narratives.</li>
-              <li class="bullet">Recreate attacker chains from internet-exposed entry points to domain-level or data-centric impact using realistic TTPs.</li>
-              <li class="bullet">Produce concise, high-signal reports with PoCs and remediation guidance that development and infrastructure teams adopt.</li>
-            </ul>
-          </div>
-        </section>
+      <!-- Skills / Arsenal -->
+      <section id="sec-arsenal" tabindex="-1">
+        <div class="path">root@abhilash:~/arsenal</div>
+        <div class="command" data-text="ls -la --modules"></div>
 
-        <div style="height:10px"></div>
-        <div style="border-top:1px dashed rgba(51,65,85,0.9);margin:12px 0"></div>
+        <div class="output">
+          <div class="section-title">&gt; AD EXPLOITATION</div>
+          <ul>
+            <li class="bullet">Kerberoasting · AS-REP Roasting · DCSync · Pass-the-Hash/Ticket · ACL abuse</li>
+          </ul>
 
-        <!-- Arsenal -->
-        <section id="sec-arsenal">
-          <div class="path">root@abhilash:~/arsenal</div>
-          <div class="command" data-text="ls -la --modules"></div>
+          <div class="section-title" style="margin-top: 0.5rem;">&gt; OFFENSIVE TOOLING</div>
+          <ul>
+            <li class="bullet">Mimikatz · BloodHound · CrackMapExec · Impacket · PowerShell-based tradecraft</li>
+          </ul>
 
-          <div class="output">
-            <div class="section-title">&gt; AD EXPLOITATION</div>
-            <ul><li class="bullet">Kerberoasting · AS-REP Roasting · DCSync · Pass-the-Hash/Ticket · ACL abuse</li></ul>
+          <div class="section-title" style="margin-top: 0.5rem;">&gt; WEB &amp; API SECURITY</div>
+          <ul>
+            <li class="bullet">Burp Suite · SQLi / XSS / SSRF · IDOR · auth / session weaknesses · OWASP Top 10 &amp; API Top 10</li>
+          </ul>
 
-            <div class="section-title" style="margin-top:8px">&gt; OFFENSIVE TOOLING</div>
-            <ul><li class="bullet">Mimikatz · BloodHound · CrackMapExec · Impacket · PowerShell tradecraft</li></ul>
+          <div class="section-title" style="margin-top: 0.5rem;">&gt; SCRIPTING &amp; AUTOMATION</div>
+          <ul>
+            <li class="bullet">Python · PowerShell · Bash — building small tools for recon, brute forcing, and parsing results</li>
+          </ul>
 
-            <div class="section-title" style="margin-top:8px">&gt; WEB &amp; API SECURITY</div>
-            <ul><li class="bullet">Burp Suite · SQLi / XSS / SSRF · IDOR · auth/session weaknesses · OWASP & API Top 10</li></ul>
+          <div class="section-title" style="margin-top: 0.5rem;">&gt; SECURITY FUNDAMENTALS</div>
+          <ul>
+            <li class="bullet">Network basics · OS internals awareness · logging &amp; detection mindset from a red-team angle</li>
+          </ul>
+        </div>
+      </section>
 
-            <div class="section-title" style="margin-top:8px">&gt; SCRIPTING &amp; AUTOMATION</div>
-            <ul><li class="bullet">Python · PowerShell · Bash — small tools for recon, bruteforce, parsing</li></ul>
-          </div>
-        </section>
+      <div class="section-divider"></div>
 
-        <div style="height:10px"></div>
-        <div style="border-top:1px dashed rgba(51,65,85,0.9);margin:12px 0"></div>
+      <!-- Credentials -->
+      <section id="sec-creds" tabindex="-1">
+        <div class="path">root@abhilash:~/credentials</div>
+        <div class="command" data-text="cat certs.db"></div>
 
-        <!-- Credentials -->
-        <section id="sec-creds">
-          <div class="path">root@abhilash:~/credentials</div>
-          <div class="command" data-text="cat certs.db"></div>
-          <div class="output">
-★ OSCP (Offensive Security Certified Professional) — <span class="tag pill-danger"><span class="tag-dot"></span>In Progress</span>
-<br/>
-★ Add other relevant certifications here
-          </div>
-
-          <div class="command" data-text="cat education.db"></div>
-          <div class="output">
-* Bachelor’s in &lt;Your Degree&gt; — &lt;Your University&gt;
-* Any focused security trainings, workshops, or CTF highlights
-          </div>
-        </section>
-
-        <div class="system-status">
-          <span>System Status: <span class="status-ok">ONLINE</span></span>
-          <span>Last updated: 2025</span>
+        <div class="output">
+          ★ OSCP (Offensive Security Certified Professional) — <span class="pill-danger tag"><span class="tag-dot"></span>In Progress</span>
+          <br/>
+          ★ Add any other relevant certifications here
         </div>
 
-        <div class="footer">© 2025 Abhilash Christopher — Built for the Void.</div>
+        <div class="command" data-text="cat education.db"></div>
+        <div class="output">
+          * Bachelor’s in &lt;Your Degree&gt; — &lt;Your University&gt;
+          <br/>
+          * Any focused security trainings, workshops, or CTF highlights
+        </div>
+      </section>
+
+      <!-- Status footer -->
+      <div class="system-status">
+        <span>System Status: <span class="status-ok">ONLINE</span></span>
+        <span>Last updated: 2025</span>
       </div>
-    </main>
-  </div>
 
-  <script>
-    /* Small helpers */
-    const sleep = ms => new Promise(r => setTimeout(r, ms));
+      <div class="footer">
+        © 2025 Abhilash Christopher — Built for the Void.
+      </div>
+    </div>
+  </main>
+</div>
 
-    async function typeText(el,text,speed=28){
-      el.textContent = '';
-      for(let i=0;i<text.length;i++){
-        el.textContent += text[i];
-        // Respect reduced-motion preference
-        if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){
-          // instant
-        } else {
-          await sleep(speed);
+<script>
+  /* tiny helper sleep */
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  /* typeText respects reduced-motion; faster but still legible */
+  async function typeText(el, text, speed = 36) {
+    el.textContent = "";
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    for (let i = 0; i < text.length; i++) {
+      el.textContent += text[i];
+      if (!reduce) await sleep(speed);
+    }
+  }
+
+  async function runTyping() {
+    const commands = document.querySelectorAll(".command[data-text]");
+    for (const cmd of commands) {
+      const text = cmd.getAttribute("data-text");
+      await typeText(cmd, text);
+      await sleep(200); // short pause after each typed command
+    }
+
+    // Append blinking cursor to the last command only (fixed behaviour)
+    const last = commands[commands.length - 1];
+    if (!last) return;
+    // If there's already a cursor, don't add another
+    if (!last.querySelector(".cursor")) {
+      const cursor = document.createElement("span");
+      cursor.className = "cursor";
+      cursor.setAttribute("aria-hidden", "true");
+      last.appendChild(cursor);
+    }
+  }
+
+  function setupNavChips() {
+    const chips = document.querySelectorAll(".nav-chip[data-target]");
+    chips.forEach(chip => {
+      // allow enter/space activation and mouse click
+      chip.addEventListener("click", () => navigateTo(chip));
+      chip.addEventListener("keydown", e => {
+        if (e.key === "Enter" || e.key === " " ) {
+          e.preventDefault();
+          navigateTo(chip);
+        }
+      });
+    });
+
+    function navigateTo(chip) {
+      const target = chip.getAttribute("data-target");
+      if (!target) return;
+      const section = document.querySelector(target);
+      if (!section) return;
+      // smooth scroll and update hash for shareable links
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+      // update URL hash without adding extra history entry
+      if (history && history.replaceState) {
+        try {
+          history.replaceState(null, "", (target));
+        } catch (e) {
+          // ignore if replaceState blocked (e.g., cross-origin restrictions)
         }
       }
+      // set focus to section for accessibility
+      section.setAttribute("tabindex", "-1");
+      section.focus({ preventScroll: true });
     }
+  }
 
-    async function runTyping(){
-      const cmds = Array.from(document.querySelectorAll('.command[data-text]'));
-      for(const c of cmds){
-        const text = c.getAttribute('data-text') || '';
-        await typeText(c,text,28);
-        await sleep(200);
-      }
-      // append cursor to last command and keep blinking
-      const last = cmds[cmds.length - 1];
-      if(last){
-        const cursor = document.createElement('span');
-        cursor.className = 'cursor';
-        cursor.setAttribute('aria-hidden','true');
-        last.appendChild(cursor);
-      }
-    }
-
-    // nav chips scroll behaviour
-    function setupNavChips(){
-      document.querySelectorAll('.nav-chip[data-target]').forEach(chip=>{
-        chip.addEventListener('click',()=>{
-          const target = chip.getAttribute('data-target');
-          const section = document.querySelector(target);
-          if(!section) return;
-          section.scrollIntoView({behavior:'smooth',block:'start'});
-          // set focus for accessibility
-          section.setAttribute('tabindex','-1');
-          section.focus({preventScroll:true});
-        });
-      });
-    }
-
-    // keyboard: allow number keys 1-4 to jump
-    document.addEventListener('keydown', e=>{
-      if(e.altKey || e.ctrlKey || e.metaKey) return;
-      if(['1','2','3','4'].includes(e.key)){
-        const map = {'1':'#sec-summary','2':'#sec-experience','3':'#sec-arsenal','4':'#sec-creds'};
-        const sec = document.querySelector(map[e.key]);
-        if(sec){ sec.scrollIntoView({behavior:'smooth',block:'start'}); }
+  /* Keyboard shortcuts: 1-4 jump to sections (non-invasive) */
+  function setupKeyboardShortcuts() {
+    document.addEventListener("keydown", (e) => {
+      if (e.altKey || e.ctrlKey || e.metaKey) return;
+      if (["1","2","3","4"].includes(e.key)) {
+        const map = {
+          "1": "#sec-summary",
+          "2": "#sec-experience",
+          "3": "#sec-arsenal",
+          "4": "#sec-creds"
+        };
+        const sel = document.querySelector(map[e.key]);
+        if (sel) {
+          sel.scrollIntoView({ behavior: "smooth", block: "start" });
+          sel.setAttribute("tabindex", "-1");
+          sel.focus({ preventScroll: true });
+        }
       }
     });
+  }
 
-    window.addEventListener('load', ()=>{
-      runTyping();
-      setupNavChips();
-    });
-  </script>
+  window.addEventListener("load", () => {
+    runTyping();
+    setupNavChips();
+    setupKeyboardShortcuts();
+  });
+</script>
 </body>
 </html>
