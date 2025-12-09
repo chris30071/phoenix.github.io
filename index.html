@@ -17,6 +17,13 @@
       --text: #e5e7eb;
       --border: #1f2937;
       --border-soft: rgba(148,163,184,0.24);
+
+      /* Scrollbar colors */
+      --scroll-track: rgba(8,10,14,0.6);        /* track background */
+      --scroll-thumb: rgba(34,197,94,0.14);     /* thumb base */
+      --scroll-thumb-hover: rgba(34,197,94,0.28);/* thumb hover/active */
+      --scroll-thumb-glow: rgba(74,222,128,0.08);/* outer glow */
+      --scroll-thumb-border: rgba(255,255,255,0.04);
     }
 
     * {
@@ -38,6 +45,70 @@
       justify-content: center;
       padding: 1.5rem;
       overflow-y: auto;
+    }
+
+    /* ---------- Custom scrollbar (WebKit) ---------- */
+    /* Page scrollbar */
+    ::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--scroll-track);
+      border-radius: 999px;
+      margin: 6px 0;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, rgba(34,197,94,0.16), rgba(34,197,94,0.12));
+      border-radius: 999px;
+      border: 2px solid var(--scroll-thumb-border);
+      box-shadow: 0 0 14px var(--scroll-thumb-glow);
+      transition: background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, var(--scroll-thumb-hover), rgba(34,197,94,0.18));
+      transform: translateX(-1px);
+      box-shadow: 0 0 20px var(--scroll-thumb-glow);
+    }
+
+    /* For scrollable containers (like terminal body and ascii wrap) - slightly thinner */
+    .term-body::-webkit-scrollbar,
+    .ascii-wrap::-webkit-scrollbar {
+      width: 9px;
+      height: 9px;
+    }
+    .term-body::-webkit-scrollbar-track,
+    .ascii-wrap::-webkit-scrollbar-track {
+      background: rgba(8,10,14,0.55);
+      border-radius: 999px;
+    }
+    .term-body::-webkit-scrollbar-thumb,
+    .ascii-wrap::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, rgba(34,197,94,0.14), rgba(34,197,94,0.10));
+      border-radius: 999px;
+      border: 2px solid rgba(255,255,255,0.03);
+      box-shadow: 0 0 10px rgba(74,222,128,0.06);
+    }
+    .term-body::-webkit-scrollbar-thumb:hover,
+    .ascii-wrap::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, rgba(34,197,94,0.26), rgba(34,197,94,0.18));
+      box-shadow: 0 0 16px rgba(74,222,128,0.09);
+    }
+
+    /* ---------- Firefox scrollbar ---------- */
+    /* note: Firefox uses 'scrollbar-width' and 'scrollbar-color' */
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+    }
+    /* For specific containers (Firefox) */
+    .term-body,
+    .ascii-wrap {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(34,197,94,0.14) rgba(8,10,14,0.55);
     }
 
     /* Layered animated background - made subtler and less noisy */
@@ -513,6 +584,8 @@
         animation: none !important;
         opacity: 1;
       }
+      /* Make scrollbars a bit simpler for reduced-motion users */
+      ::-webkit-scrollbar-thumb { box-shadow: none !important; transform: none !important; }
     }
 
     /* small keyboard focus affordance for interactive elements */
